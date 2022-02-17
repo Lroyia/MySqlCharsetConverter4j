@@ -3,7 +3,9 @@ package io.lroyia.converter;
 import io.lroyia.converter.util.SQLUtil;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -62,8 +64,8 @@ public class ApplicationRun {
             }
         }
         File outputFile = new File("alter.sql");
-        try (FileWriter fileWriter = new FileWriter(outputFile)) {
-            fileWriter.append(String.join("\n", alterSQLList));
+        try (FileOutputStream fileWriter = new FileOutputStream(outputFile)) {
+            fileWriter.write(String.join("\n", alterSQLList).getBytes(StandardCharsets.UTF_8));
         }
     }
 
