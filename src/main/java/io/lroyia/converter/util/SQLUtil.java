@@ -46,6 +46,20 @@ public class SQLUtil {
     }
 
     /**
+     * 提交表修改
+     * @param sql   修改sql
+     * @throws Exception    异常
+     * @author lroyia
+     * @since  2022年2月17日 14:01:48
+     */
+    public static void executeAlter(String sql) throws Exception{
+        try (Connection connection = getConnection();
+             Statement statement = connection.createStatement()){
+            statement.executeUpdate(sql);
+        }
+    }
+
+    /**
      * 获取数据库连接
      * @return  数据库连接
      * @throws Exception    连接异常
@@ -62,7 +76,7 @@ public class SQLUtil {
     }
 
     public static void setUserName(String userName) {
-        USER_NAME = userName;
+        SQLUtil.USER_NAME = userName;
     }
 
     public static void setPASSWORD(String PASSWORD) {

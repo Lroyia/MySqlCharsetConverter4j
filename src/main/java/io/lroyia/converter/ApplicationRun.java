@@ -21,11 +21,11 @@ public class ApplicationRun {
     private static final String CHARSET = "utf8mb4";
     private static final String COLLATION = "utf8mb4_0900_ai_ci";
 
-    private static final String HOST = "";
-    private static final String PORT = "";
-    private static final String DB_NAME = "";
-    private static final String USERNAME = "";
-    private static final String PASSWORD = "";
+    private static final String HOST = ""; // 连接域
+    private static final String PORT = ""; // 连接端口
+    private static final String DB_NAME = "";// 连接默认数据库
+    private static final String USERNAME = ""; // 连接用户名
+    private static final String PASSWORD = ""; // 连接密码
 
     public static void main(String[] args) throws Exception {
         // 连接信息
@@ -43,7 +43,7 @@ public class ApplicationRun {
         };
 
         List<String> alterSQLList = new ArrayList<>();
-        alterSQLList.add("SET NAME " + CHARSET);
+        alterSQLList.add("SET NAMES " + CHARSET + ";");
         for (String db : dbList) {
             List<Map<String, Object>> tableInfoList = SQLUtil.select(String.format("SHOW TABLE STATUS FROM %s", db));
             for (Map<String, Object> tableInfo : tableInfoList) {
@@ -63,9 +63,17 @@ public class ApplicationRun {
                 }
             }
         }
-        File outputFile = new File("alter.sql");
-        try (FileOutputStream fileWriter = new FileOutputStream(outputFile)) {
-            fileWriter.write(String.join("\n", alterSQLList).getBytes(StandardCharsets.UTF_8));
+//        File outputFile = new File("alter.sql");
+//        try (FileOutputStream fileWriter = new FileOutputStream(outputFile)) {
+//            fileWriter.write(String.join("\n", alterSQLList).getBytes(StandardCharsets.UTF_8));
+//        }
+        for (String sql : alterSQLList) {
+            try{
+                System.out.println(sql);
+                SQLUtil.executeAlter(sql);
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
         }
     }
 
@@ -93,6 +101,9 @@ public class ApplicationRun {
         for (Map<String, Object> each : tableInfo) {
             String field = each.get("Field").toString();
             String type = each.get("Type").toString();
+            if(!(type.contains("varchar") || type.contains("text"))){
+                continue;
+            }
             String isNull = each.get("Null").toString().equals("YES") ? "NULL" : "NOT NULL";
             String comment = each.get("Comment").toString();
             if (tableName.contains(".")) {
