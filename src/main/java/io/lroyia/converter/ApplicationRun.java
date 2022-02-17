@@ -18,8 +18,8 @@ import java.util.Map;
  **/
 public class ApplicationRun {
 
-    private static final String CHARSET = "utf8mb4";
-    private static final String COLLATION = "utf8mb4_0900_ai_ci";
+    private static final String CHARSET = "utf8mb4"; // 目标编码
+    private static final String COLLATION = "utf8mb4_0900_ai_ci";// 目标编码排序
 
     private static final String HOST = ""; // 连接域
     private static final String PORT = ""; // 连接端口
@@ -27,20 +27,21 @@ public class ApplicationRun {
     private static final String USERNAME = ""; // 连接用户名
     private static final String PASSWORD = ""; // 连接密码
 
+    // 需要修改统一编码的数据库
+    private static final String[] dbList = {
+            "crgs",
+            "aiccs",
+            "crev",
+            "aicorg",
+            "crgsaicorg",
+    };
+
     public static void main(String[] args) throws Exception {
         // 连接信息
         SQLUtil.setURL(String.format("jdbc:mysql://%s:%s/%s?characterEncoding=utf-8" +
                 "&useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&serverTimezone=UTC", HOST, PORT, DB_NAME));
         SQLUtil.setUserName(USERNAME);
         SQLUtil.setPASSWORD(PASSWORD);
-
-        String[] dbList = {
-                "crgs",
-                "aiccs",
-                "crev",
-                "aicorg",
-                "crgsaicorg",
-        };
 
         List<String> alterSQLList = new ArrayList<>();
         alterSQLList.add("SET NAMES " + CHARSET + ";");
