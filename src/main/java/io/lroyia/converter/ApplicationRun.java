@@ -102,7 +102,7 @@ public class ApplicationRun {
         for (Map<String, Object> each : tableInfo) {
             String field = each.get("Field").toString();
             String type = each.get("Type").toString();
-            if(!(type.contains("varchar") || type.contains("text"))){
+            if(!(type.contains("char") || type.contains("text"))){
                 continue;
             }
             String isNull = each.get("Null").toString().equals("YES") ? "NULL" : "NOT NULL";
